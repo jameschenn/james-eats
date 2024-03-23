@@ -9,13 +9,16 @@ export const Sandwich = () => {
 
     return (
         <group>
-            {ingredients.map((ingredient, index) => (
+            {
+            ingredients.map((ingredient, index) => (
                 <Ingredient 
                     key={ingredient.id + ingredient.name}
+                    showPrice={index > 0 && index < ingredients.length - 1} //Check if it's either slices of bread cause it's part of the base price
                     ingredient={ingredient}
                     position-y={index * INGREDIENT_SPACING}
                 />
-            ))}
+            ))
+            }
         </group>
     )
 }

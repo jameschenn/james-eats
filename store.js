@@ -81,7 +81,7 @@ export const INGREDIENTS = {
         name: "bread",
       },
     ],
-    total: 5,
+    total: 5, //base price of sandwich
     
     //add ingredients, and we make sure to always add the bread at the end with each added ingredient
     addIngredient: (ingredient) =>
@@ -98,7 +98,7 @@ export const INGREDIENTS = {
             id: 1,
           },
         ],
-      })),
+    })),
     //filter and remove ingredient by ID
     removeIngredient: (ingredient) =>
       set((state) => ({
