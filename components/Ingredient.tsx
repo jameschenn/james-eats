@@ -1,6 +1,7 @@
-import { Gltf, Text3D } from '@react-three/drei/native';
+import { Gltf, Text3D, Float } from '@react-three/drei/native';
 import { INGREDIENTS, useSandwich  } from '../store';
 import { Suspense } from 'react';
+import { animated, useSpring} from '@react-spring/three';
 import fontPath from "../assets/fonts/Poppins_Bold.json";
 
 const INGREDIENT_SCALE = 3;
@@ -8,11 +9,19 @@ const INGREDIENT_SCALE_Y = 5;
 
 
 export const Ingredient = ({ingredient, showPrice, ...props}) => {
-
+    
     const removeIngredient = useSandwich((state) => state.removeIngredient);
+    const addedToCart = useSandwich((state) => state.addedToCart)
+    
+    //animations
+    const { positionY } = useSpring({positionY: props["position-y"]});
+    const { scale } = useSpring({
+        from: {scale: 0.5,},
+        to:{ scale: 1 }
+    })
 
     return (
-        <group {...props}>
+        <animated.group {...props} scale={scale} position-y={positionY} >
             {showPrice && (
                 <Suspense>
                     <group
@@ -20,6 +29,7 @@ export const Ingredient = ({ingredient, showPrice, ...props}) => {
                             e.stopPropagation();
                             removeIngredient(ingredient)
                         }}
+                        visible={!addedToCart}
                     >
                         <mesh position-x={0.7} position-y={0.042}>
                             <planeGeometry args={[0.9, 0.16]} />
@@ -49,11 +59,17 @@ export const Ingredient = ({ingredient, showPrice, ...props}) => {
                     </group>
                 </Suspense>
             )}
-            <Gltf 
-                src={INGREDIENTS[ingredient.name].src}
-                scale={INGREDIENT_SCALE}
-                scale-y={INGREDIENT_SCALE_Y + (ingredient.name === 'bread' ? 5 : 0)} //make sure bread slices are nice and thick compared to other ingredients
-                 />
-        </group>
+            <Float 
+                floatingRange={addedToCart ? [0,0] : [-0.01, 0.01]}
+                speed={addedToCart ? 0 : 4}
+                rotationIntensity={0.5}
+            >
+                <Gltf 
+                    src={INGREDIENTS[ingredient.name].src}
+                    scale={INGREDIENT_SCALE}
+                    scale-y={INGREDIENT_SCALE_Y + (ingredient.name === 'bread' ? 5 : 0)} //make sure bread slices are nice and thick compared to other ingredients
+                    />
+            </Float>
+        </animated.group>
     )
 }

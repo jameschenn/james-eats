@@ -9,21 +9,45 @@ function captializeFirstLetter(str) {
 export const BottomUI = () => {
     const addIngredient = useSandwich((state) => state.addIngredient);
     const total = useSandwich((state) => state.total);
+    const [addedToCart, setAddedToCart] = useSandwich((state) => [state.addedToCart, state.setAddedToCart])
+
     return (
         <SafeAreaView edges={"bottom"}>
             <View style={bottomUIStyles.bottomUIView}>
+                {addedToCart ? (
+                    <View>
+                        <Text
+                        style={bottomUIStyles.addedToCartText}
+                        >
+                        Total - ${total.toFixed(2)}
+                        </Text>
+                        <Text
+                        style={bottomUIStyles.confirmationText}
+                        >
+                        Order sent successfully, it will be ready in 5 minutes! James will directly deliver it to your home 🛵
+                        </Text>
+                        <IngredientButton
+                        title={`Cancel order`}
+                        color="#fff"
+                        backgroundColor="#7C4DFF"
+                        bold
+                        onClick={() => setAddedToCart(false)}
+                        />
+                    </View>                    
+                ) : (                
+                <>
                 <View style={bottomUIStyles.bottomUIStylesTop}>
                     <Text style={bottomUIStyles.storeName}>
-                        RU's Sandwiches
+                        James' Sandwicherie
                     </Text>
                     <Text>⭐️⭐️⭐️⭐️⭐️</Text>
                 </View>
                 <Text style={bottomUIStyles.storeDescription}>
-                    Sandwiches made by Ru in the kitchen
+                    Sandwiches made with love by James
                 </Text>
                 <View style={bottomUIStyles.bottomUIStylesBottom} />
                 <Text style={bottomUIStyles.cost}>
-                    Your Creation ($5.00)
+                    Your Creation
                 </Text>
                 <Text style={bottomUIStyles.instructions}>
                     Compose your sandwich by adding ingredients
@@ -45,7 +69,10 @@ export const BottomUI = () => {
                     color="#fff"
                     backgroundColor="#7C4Dff"
                     bold
+                    onClick={() => setAddedToCart(true)}
                 />
+                </>
+                )}
             </View>
         </SafeAreaView>
     )
@@ -90,5 +117,14 @@ const bottomUIStyles = {
     },
     ingredient: {
         padding:10,
+    },
+    addedToCartText: {
+        fontSize: 16,
+        fontWeight: "900",
+    },
+    confirmationText: {
+        color: "#666",
+        marginTop: 4,
+        marginBottom: 16,
     }
 }

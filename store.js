@@ -82,6 +82,7 @@ export const INGREDIENTS = {
       },
     ],
     total: 5, //base price of sandwich
+    addedToCart: false,
     
     //add ingredients, and we make sure to always add the bread at the end with each added ingredient
     addIngredient: (ingredient) =>
@@ -105,4 +106,6 @@ export const INGREDIENTS = {
         total: state.total - (INGREDIENTS[ingredient.name]?.price || 0),
         ingredients: state.ingredients.filter((ing) => ing.id !== ingredient.id),
       })),
+
+      setAddedToCart: (addedToCart) => set({addedToCart}),
   }));
